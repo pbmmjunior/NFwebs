@@ -1,0 +1,50 @@
+﻿@model List<NFweb.Models.NotaFiscal>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var lista = Model;
+}
+
+
+<h3>Listagem de NF</h3>
+<table class="table table-bordered table-striped datatable-padrao" id="tbDados">
+    <thead>
+        <tr>
+            <th>#ID</th>
+            <th>Cliente</th>
+            <th>Produto</th>
+            <th>Fornecedor</th>
+            <th>Qtd.</th>
+            <th>Data</th>
+            <th>Valor</th>
+            <th>&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var nota in lista)
+        {
+            <tr>
+                <td>@nota.IdNotaFiscal</td>
+                <td>@nota.cliente.NomeCliente</td>
+                <td>@nota.produto.NomeProduto</td>
+                <td>@nota.fornecedor.NomeFornecedor</td>
+                <td>@nota.QtdeProdutos</td>
+                <td>@nota.DataNotaFiscal.ToString("dd/MM/yyyy")</td>
+                <td>@nota.ValorNotaFiscal.ToString("n2")</td>
+                <td>
+                    <a href="@Url.Action("Edit")?id=@nota.IdNotaFiscal"> Editar</a>
+                    &nbsp;
+                    <a href="@Url.Action("Relatorio")?id=@nota.produto.IdProduto"> Relatório</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    carregarDataTablePadrao('tbDados');
+    function adicionarNovo() {
+        location.href = '@Url.Action("Edit")';
+    }
+
+    $(".dataTables_filter").append('<button  style="" class="btn btn-primary pull-right" type="button" onclick="adicionarNovo()"><i class="fa fa-plus"></i>&nbsp;Novo</button>');
+</script>

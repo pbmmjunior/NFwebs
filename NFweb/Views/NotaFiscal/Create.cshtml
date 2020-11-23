@@ -1,0 +1,89 @@
+﻿@model NFweb.Models.NotaFiscal
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Nota Fiscal - Edição</h3>
+<form method="POST" id="frmNF">
+    @Html.HiddenFor(x => x.IdNotaFiscal)
+    @Html.HiddenFor(x => x.DataNotaFiscal)
+    <div class="">
+        <div class="row">
+            <div class="col-sm-3">
+                <label>Cliente</label>
+                @Html.DropDownListFor(x => x.cliente.IdCliente, Model.ListaClientes, "Selecione o Cliente", new { required = "required", @class = "form-control" })
+            </div>
+            <div class="col-sm-3">
+                <label>Fornecedor</label>
+                @Html.DropDownListFor(x => x.fornecedor.IdFornecedor, Model.ListaFornecedor, "Selecione o Fornecedor", new { required = "required", @class = "form-control" })
+            </div>
+            <div class="col-sm-3">
+                <label>Produto</label>
+                @Html.DropDownListFor(x => x.produto.IdProduto, Model.ListaProdutos, "Selecione o Produto", new { required = "required", @class = "form-control" })
+            </div>
+            <div class="col-sm-3">
+                <label>Quantidade</label>
+                @Html.TextBoxFor(m => m.QtdeProdutos, new { @class = "form-control numero", required = "required" })
+            </div>
+        </div>
+
+        <div class="row pull-right" style="margin-top:10px;">
+            <div class="col-sm-12">
+                <a onclick="salvar()" class="btn btn-primary pull-right" style="margin-right:5px;">Salvar</a>
+                @if (Model.IdNotaFiscal > 0)
+                {
+                    <a onclick="excluir()" class="btn btn-primary pull-right" style="margin-right:5px;">Excluir</a>
+                }
+
+                <a onclick="voltar()" class="btn btn-default pull-right" style="margin-right:5px;">Voltar</a>
+
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    function salvar() {
+        if ($('#frmNF').valid()) {
+            $.ajax({
+                url: '@Url.Action("Create")',
+                data: $('#frmNF').serialize(),
+                type: "POST",
+                success: function (data) {
+                    location.href = '@Url.Action("Index")?msgSucesso='+data
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert(xhr.statusText);
+                }
+            });
+        }
+    }
+
+    function voltar() {
+        location.href = '@Url.Action("Index")';
+    }
+
+    function excluir() {
+        if (window.confirm("Você deseja excluir esse registro?")) {
+            $('#frmNF').attr("action", "@Url.Action("Remove")");
+            $.ajax({
+                url: '@Url.Action("Remove")',
+                data: $('#frmNF').serialize(),
+                type: "POST",
+                success: function (data) {
+                    location.href = '@Url.Action("Index")?msgSucesso='+data
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert(xhr.statusText);
+                }
+            });
+        } else {
+            return false;
+        }
+    }
+
+    $(".numero").each(function () {
+        SoNumeros($(this));
+    });
+
+</script>

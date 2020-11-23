@@ -1,0 +1,32 @@
+﻿@model List<NFweb.Models.NotaFiscal>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var lista = Model;
+}
+
+<h3>Relatório de Vendas por Produto</h3>
+<table class="table table-bordered table-striped datatable-padrao" id="tbRelatorio">
+    <thead>
+        <tr>
+            <th>Produto</th>
+            <th>Quantidade</th>
+            <th>Data</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var nota in lista)
+        {
+            <tr>
+                <td>@nota.produto.NomeProduto</td>
+                <td>@nota.QtdeProdutos</td>
+                <td>@nota.DataNotaFiscal.ToString("dd/MM/yyyy")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    carregarDataTablePadrao('tbRelatorio');
+
+    $(".dataTables_filter").append('<button  style="" class="btn btn-primary pull-right" type="button" onclick="adicionarNovo()"><i class="fa fa-plus"></i>&nbsp;Novo</button>');
+</script>
